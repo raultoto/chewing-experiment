@@ -3,7 +3,7 @@
 
 import re
 
-BOPOMOFO = {
+_BOPOMOFO = {
     "initial": {
         "literal": "ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙ",
         "shift": 9,
@@ -26,11 +26,11 @@ BOPOMOFO = {
     },
 }
 
-BOPOMOFO_KEY = ["initial", "middle", "final", "tone"]
+_BOPOMOFO_KEY = ["initial", "middle", "final", "tone"]
 
-BOPOMOFO_REGEX = re.compile(
-    "".join(["(?P<{}>[{{}}]?)".format(key) for key in BOPOMOFO_KEY]).format(
-        *[BOPOMOFO[key]["literal"] for key in BOPOMOFO_KEY]),
+_BOPOMOFO_REGEX = re.compile(
+    "".join(["(?P<{}>[{{}}]?)".format(key) for key in _BOPOMOFO_KEY]).format(
+        *[_BOPOMOFO[key]["literal"] for key in _BOPOMOFO_KEY]),
     re.X)
 
 
@@ -47,22 +47,22 @@ def convert_bopomofo_to_phone_list(bopomofo):
 
     for x in bopomofo.split(" "):
         phone = 0
-        m = BOPOMOFO_REGEX.match(x)
+        m = _BOPOMOFO_REGEX.match(x)
         if not m:
             raise Exception("{} is illegal bopomofo".format(x))
 
-        for key in BOPOMOFO.keys():
+        for key in _BOPOMOFO.keys():
             if m.group(key):
-                phone += ((BOPOMOFO[key]["literal"].find(m.group(key)) + 1) <<
-                          BOPOMOFO[key]["shift"])
+                phone += ((_BOPOMOFO[key]["literal"].find(m.group(key)) + 1) <<
+                          _BOPOMOFO[key]["shift"])
 
         phone_list.append(phone)
 
     return phone_list
 
 
-def get_partial_phone(phone, key):
-    return (phone >> BOPOMOFO[key]["shift"]) & BOPOMOFO[key]["mask"]
+def _get_partial_phone(phone, key):
+    return (phone >> _BOPOMOFO[key]["shift"]) & _BOPOMOFO[key]["mask"]
 
 
 def calculate_hamming_distance(x, y):
@@ -88,9 +88,9 @@ def calculate_hamming_distance(x, y):
 
     hamming_distance = 0
     for i in range(len(phone_list_x)):
-        for key in BOPOMOFO_KEY:
-            partial_x = get_partial_phone(phone_list_x[i], key)
-            partial_y = get_partial_phone(phone_list_y[i], key)
+        for key in _BOPOMOFO_KEY:
+            partial_x = _get_partial_phone(phone_list_x[i], key)
+            partial_y = _get_partial_phone(phone_list_y[i], key)
             if partial_x != partial_y:
                 hamming_distance += 1
         pass
