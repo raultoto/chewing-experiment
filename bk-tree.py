@@ -67,26 +67,14 @@ class BKTree():
 
         >>> tree = BKTree()
         >>> tree.insert(["ㄘㄜˋ ㄕˋ", "ㄘㄜ ㄕˋ", "ㄘㄜˋ ㄕ", "ㄘㄜ ㄕ", "ㄔㄜˋ ㄙˋ"])
-        >>> tree.query("ㄘㄜˋ ㄕˋ", 1) == [
-        ... {'bopomofo': 'ㄘㄜˋ ㄕˋ', 'distance': 0}
-        ... ]
-        True
-        >>> tree.query("ㄘㄜˋ ㄕˋ", 2) == [
-        ... {'bopomofo': 'ㄘㄜˋ ㄕˋ', 'distance': 0},
-        ... {'bopomofo': 'ㄘㄜ ㄕˋ', 'distance': 1},
-        ... {'bopomofo': 'ㄘㄜˋ ㄕ', 'distance': 1},
-        ... ]
-        True
-        >>> tree.query("ㄘㄜˋ ㄕˋ", 3) == [
-        ... {'bopomofo': 'ㄘㄜˋ ㄕˋ', 'distance': 0},
-        ... {'bopomofo': 'ㄘㄜ ㄕˋ', 'distance': 1},
-        ... {'bopomofo': 'ㄘㄜˋ ㄕ', 'distance': 1},
-        ... {'bopomofo': 'ㄘㄜ ㄕ', 'distance': 2},
-        ... {'bopomofo': 'ㄔㄜˋ ㄙˋ', 'distance': 2},
-        ... ]
-        True
-        >>> tree.query("ㄘㄜˋ", 100) == []
-        True
+        >>> len(tree.query("ㄘㄜˋ ㄕˋ", 1))
+        1
+        >>> len(tree.query("ㄘㄜˋ ㄕˋ", 2))
+        3
+        >>> len(tree.query("ㄘㄜˋ ㄕˋ", 3))
+        5
+        >>> len(tree.query("ㄘㄜˋ", 100))
+        0
         """
 
         length = self._get_bopomofo_length(bopomofo)
