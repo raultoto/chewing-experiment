@@ -45,6 +45,23 @@ class BKTree():
                     "bopomofo": bopomofo,
                 }
 
+    def _query(self, current, bopomofo, threshold):
+        result = []
+
+        distance = self._distance_func(current["bopomofo"], bopomofo)
+        if distance < threshold:
+            result.append({
+                "bopomofo": current["bopomofo"],
+                "distance": distance,
+            })
+
+        for i in range(distance - threshold, distance + threshold + 1):
+            if "children" in current and i in current["children"]:
+                result.extend(
+                    self._query(current["children"][i], bopomofo, threshold))
+
+        return result
+
     def query(self, bopomofo, threshold):
         """This function queries BK-tree with distance threshold
 
@@ -72,25 +89,9 @@ class BKTree():
         True
         """
 
-        def _query(current):
-            result = []
-
-            distance = self._distance_func(current["bopomofo"], bopomofo)
-            if distance < threshold:
-                result.append({
-                    "bopomofo": current["bopomofo"],
-                    "distance": distance,
-                })
-
-            for i in range(distance - threshold, distance + threshold + 1):
-                if "children" in current and i in current["children"]:
-                    result.extend(_query(current["children"][i]))
-
-            return result
-
         length = self._get_bopomofo_length(bopomofo)
         if length in self._root:
-            return _query(self._root[length])
+            return self._query(self._root[length], bopomofo, threshold)
         else:
             return []
 
