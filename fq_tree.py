@@ -56,7 +56,9 @@ class FQTree():
                 self._counter[length]["leaf"] -= 1
 
         elif self._is_leaf_node(current):
-            if len(current["bopomofo"]) < self._BUCKET_SIZE:
+            if bopomofo in current["bopomofo"]:
+                pass
+            elif len(current["bopomofo"]) <= self._BUCKET_SIZE:
                 current["bopomofo"].append(bopomofo)
             else:
                 bopomofo_list = current["bopomofo"]
