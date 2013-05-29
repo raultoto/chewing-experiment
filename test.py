@@ -8,7 +8,7 @@ from fq_tree import FQTree
 
 
 def main():
-    data = map(lambda x: x["bopomofo"], lib.load_tsi_src())
+    data = list(map(lambda x: x["bopomofo"], lib.load_tsi_src()))
 
     print("BKTree")
     bktree = BKTree()
