@@ -30,8 +30,11 @@ _BOPOMOFO_KEY = ["initial", "middle", "final", "tone"]
 
 _BOPOMOFO_REGEX = re.compile(
     "".join(["(?P<{}>[{{}}]?)".format(key) for key in _BOPOMOFO_KEY]).format(
-        *[_BOPOMOFO[key]["literal"] for key in _BOPOMOFO_KEY]),
-    re.X)
+        *[_BOPOMOFO[key]["literal"] for key in _BOPOMOFO_KEY]))
+
+_TSI_SRC_REGEX = re.compile(
+    "(?P<phrase>\S+)\s+(?P<frequency>\d+)\s+(?P<bopomofo>.*)"
+)
 
 
 def convert_bopomofo_to_phone_list(bopomofo):
@@ -96,6 +99,26 @@ def calculate_hamming_distance(x, y):
         pass
 
     return hamming_distance
+
+
+def load_tsi_src(filename="tsi.src"):
+    result = []
+    with open(filename) as f:
+        for line in f:
+            normalized_line = line[:line.find("#")]
+            normalized_line.strip()
+            if not normalized_line:
+                continue
+
+            m = _TSI_SRC_REGEX.match(normalized_line)
+            if not m:
+                raise Exception("Unknown line {} in tsi.src".format(line))
+            result.append({
+                "phrase": m.group("phrase"),
+                "frequency": int(m.group("frequency")),
+                "bopomofo": m.group("bopomofo"),
+            })
+    return result
 
 
 if __name__ == "__main__":
