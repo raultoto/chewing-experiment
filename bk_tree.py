@@ -5,12 +5,14 @@ import lib
 
 
 class BKTree():
+    _MAXIMUM_BOPOMOFO_LEN = 11
+
     def __init__(self, *, distance_func=lib.calculate_hamming_distance):
         self._distance_func = distance_func
         self._root = {}
 
         self._counter = {}
-        for i in range(1, 12):
+        for i in range(1, self._MAXIMUM_BOPOMOFO_LEN + 1):
             self._counter[i] = {
                 "insert": 0,
                 "node": 0,
@@ -46,8 +48,6 @@ class BKTree():
 
         for bopomofo in bopomofo_list:
             length = self._get_bopomofo_length(bopomofo)
-            if length == 12:
-                print(bopomofo)
             self._counter[length]["insert"] += 1
 
             if length in self._root:
@@ -101,7 +101,7 @@ class BKTree():
     def print_statistic(self):
         insert = 0
         node = 0
-        for i in range(1, 12):
+        for i in range(1, self._MAXIMUM_BOPOMOFO_LEN + 1):
             print("For length {}:".format(i))
             print("\tInsert count is {}".format(self._counter[i]["insert"]))
             print("\tTree node count is {}".format(self._counter[i]["node"]))
