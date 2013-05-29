@@ -53,7 +53,7 @@ class FQTree():
                 current["children"][distance] = {
                     "bopomofo": [bopomofo],
                 }
-                self._counter[length]["leaf"] -= 1
+                self._counter[length]["leaf"] += 1
 
         elif self._is_leaf_node(current):
             if bopomofo in current["bopomofo"]:
